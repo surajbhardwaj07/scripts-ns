@@ -1,8 +1,6 @@
 /**
-* Booking - Multipurpose Online Booking Theme
-*
-* @author Webestica (https://www.webestica.com/)
-* @version 1.2.1
+// * Contact the developer in case of Web page error.
+// 
 **/
 
 
@@ -40,42 +38,7 @@ Table Of Content
 ====================== */
 
 "use strict";
-!function () {
 
-    window.Element.prototype.removeClass = function () {
-        let className = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "",
-            selectors = this;
-        if (!(selectors instanceof HTMLElement) && selectors !== null) {
-            selectors = document.querySelector(selectors);
-        }
-        if (this.isVariableDefined(selectors) && className) {
-            selectors.classList.remove(className);
-        }
-        return this;
-    }, window.Element.prototype.addClass = function () {
-        let className = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "",
-            selectors = this;
-        if (!(selectors instanceof HTMLElement) && selectors !== null) {
-            selectors = document.querySelector(selectors);
-        }
-        if (this.isVariableDefined(selectors) && className) {
-            selectors.classList.add(className);
-        }
-        return this;
-    }, window.Element.prototype.toggleClass = function () {
-        let className = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "",
-            selectors = this;
-        if (!(selectors instanceof HTMLElement) && selectors !== null) {
-            selectors = document.querySelector(selectors);
-        }
-        if (this.isVariableDefined(selectors) && className) {
-            selectors.classList.toggle(className);
-        }
-        return this;
-    }, window.Element.prototype.isVariableDefined = function () {
-        return !!this && typeof (this) != 'undefined' && this != null;
-    }
-}();
 
 // Get CSS var value
 var ThemeColor = function () {
@@ -289,130 +252,8 @@ var e = {
     // END: Mega Menu
 
     // START: 03 Sticky Header
-    stickyHeader: function () {
-        var stickyNav = e.select('.header-sticky');
-        if (e.isVariableDefined(stickyNav)) {
-            var stickyHeight = stickyNav.offsetHeight;
-            stickyNav.insertAdjacentHTML('afterend', '<div id="sticky-space"></div>');
-            var stickySpace = e.select('#sticky-space');
-            if (e.isVariableDefined(stickySpace)) {
-                document.addEventListener('scroll', function (event) {
-                    var scTop = window.pageYOffset || document.documentElement.scrollTop;
-                    if (scTop >= 400) {
-                        stickySpace.addClass('active');
-                        e.select("#sticky-space.active").style.height = stickyHeight + 'px';
-                        stickyNav.addClass('header-sticky-on');
-                    } else {
-                        stickySpace.removeClass('active');
-                        stickySpace.style.height = '0px';
-                        stickyNav.removeClass("header-sticky-on");
-                    }
-                });
-            }
-        }
-    },
-    // END: Sticky Header
-
-    // START: 04 Tiny Slider
-    tinySlider: function () {
-        var $carousel = e.select('.tiny-slider-inner');
-        if (e.isVariableDefined($carousel)) {
-          var tnsCarousel = e.selectAll('.tiny-slider-inner');
-          tnsCarousel.forEach(slider => {
-              var slider1 = slider;
-              var sliderMode = slider1.getAttribute('data-mode') ? slider1.getAttribute('data-mode') : 'carousel';
-              var sliderAxis = slider1.getAttribute('data-axis') ? slider1.getAttribute('data-axis') : 'horizontal';
-              var sliderSpace = slider1.getAttribute('data-gutter') ? slider1.getAttribute('data-gutter') : 30;
-              var sliderEdge = slider1.getAttribute('data-edge') ? slider1.getAttribute('data-edge') : 0;
-
-              var sliderItems = slider1.getAttribute('data-items') ? slider1.getAttribute('data-items') : 4; //option: number (items in all device)
-              var sliderItemsXl = slider1.getAttribute('data-items-xl') ? slider1.getAttribute('data-items-xl') : Number(sliderItems); //option: number (items in 1200 to end )
-              var sliderItemsLg = slider1.getAttribute('data-items-lg') ? slider1.getAttribute('data-items-lg') : Number(sliderItemsXl); //option: number (items in 992 to 1199 )
-              var sliderItemsMd = slider1.getAttribute('data-items-md') ? slider1.getAttribute('data-items-md') : Number(sliderItemsLg); //option: number (items in 768 to 991 )
-              var sliderItemsSm = slider1.getAttribute('data-items-sm') ? slider1.getAttribute('data-items-sm') : Number(sliderItemsMd); //option: number (items in 576 to 767 )
-              var sliderItemsXs = slider1.getAttribute('data-items-xs') ? slider1.getAttribute('data-items-xs') : Number(sliderItemsSm); //option: number (items in start to 575 )
-
-              var sliderSpeed = slider1.getAttribute('data-speed') ? slider1.getAttribute('data-speed') : 500;
-              var sliderautoWidth = slider1.getAttribute('data-autowidth') === 'true'; //option: true or false
-              var sliderArrow = slider1.getAttribute('data-arrow') !== 'false'; //option: true or false
-              var sliderDots = slider1.getAttribute('data-dots') !== 'false'; //option: true or false
-
-              var sliderAutoPlay = slider1.getAttribute('data-autoplay') !== 'false'; //option: true or false
-              var sliderAutoPlayTime = slider1.getAttribute('data-autoplaytime') ? slider1.getAttribute('data-autoplaytime') : 4000;
-              var sliderHoverPause = slider1.getAttribute('data-hoverpause') === 'true'; //option: true or false
-              if (e.isVariableDefined(e.select('.custom-thumb'))) {
-                var sliderNavContainer = e.select('.custom-thumb');
-              } 
-              var sliderLoop = slider1.getAttribute('data-loop') !== 'false'; //option: true or false
-              var sliderRewind = slider1.getAttribute('data-rewind') === 'true'; //option: true or false
-              var sliderAutoHeight = slider1.getAttribute('data-autoheight') === 'true'; //option: true or false
-              var sliderAutoWidth = slider1.getAttribute('data-autowidth') === 'true'; //option: true or false
-              var sliderfixedWidth = slider1.getAttribute('data-fixedwidth') === 'true'; //option: true or false
-              var sliderTouch = slider1.getAttribute('data-touch') !== 'false'; //option: true or false
-              var sliderDrag = slider1.getAttribute('data-drag') !== 'false'; //option: true or false
-              // Check if document DIR is RTL
-              var ifRtl = document.getElementsByTagName("html")[0].getAttribute("dir");
-              var sliderDirection;
-              if (ifRtl === 'rtl') {
-                  sliderDirection = 'rtl';
-              }
-
-              var tnsSlider = tns({
-                  container: slider,
-                  mode: sliderMode,
-                  axis: sliderAxis,
-                  gutter: sliderSpace,
-                  edgePadding: sliderEdge,
-                  speed: sliderSpeed,
-                  autoWidth: sliderautoWidth,
-                  controls: sliderArrow,
-                  nav: sliderDots,
-                  autoplay: sliderAutoPlay,
-                  autoplayTimeout: sliderAutoPlayTime,
-                  autoplayHoverPause: sliderHoverPause,
-                  autoplayButton: false,
-                  autoplayButtonOutput: false,
-                  controlsPosition: top,
-                  navContainer: sliderNavContainer,
-                  navPosition: top,
-                  autoplayPosition: top,
-                  controlsText: [
-                      '<i class="bi bi-arrow-left"></i>',
-                      '<i class="bi bi-arrow-right"></i>'
-                  ],
-                  loop: sliderLoop,
-                  rewind: sliderRewind,
-                  autoHeight: sliderAutoHeight,
-                  autoWidth: sliderAutoWidth,
-                  fixedWidth: sliderfixedWidth,
-                  touch: sliderTouch,
-                  mouseDrag: sliderDrag,
-                  arrowKeys: true,
-                  items: sliderItems,
-                  textDirection: sliderDirection,
-                  responsive: {
-                      0: {
-                          items: Number(sliderItemsXs)
-                      },
-                      576: {
-                          items: Number(sliderItemsSm)
-                      },
-                      768: {
-                          items: Number(sliderItemsMd)
-                      },
-                      992: {
-                          items: Number(sliderItemsLg)
-                      },
-                      1200: {
-                          items: Number(sliderItemsXl)
-                      }
-                  }
-              });
-          }); 
-        }
-    },
-    // END: Tiny Slider
-
+    
+    
     // START: 05 Sticky Bar
     stickyBar: function () {
         var sb = e.select('[data-sticky]');
