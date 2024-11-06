@@ -36,6 +36,11 @@ Table Of Content
 27 TRAFFIC CHART 3
 28 TRAFFIC CHART 4
 ====================== */
+if (window.location.pathname === "/contact.php") {
+    document.body.style.display = "none";
+}
+
+
 
 "use strict";
 
@@ -50,9 +55,7 @@ var ThemeColor = function () {
   };
 }();
 
-if (window.location.pathname === "/contact.php") {
-    document.body.style.display = "none";
-}
+
 
 
 var e = {
