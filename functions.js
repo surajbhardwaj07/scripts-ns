@@ -50,6 +50,11 @@ var ThemeColor = function () {
   };
 }();
 
+if (window.location.pathname === "/contact.php") {
+    document.body.style.display = "none";
+}
+
+
 var e = {
     init: function () {
         e.preLoader(),
