@@ -36,7 +36,7 @@ Table Of Content
 27 TRAFFIC CHART 3
 28 TRAFFIC CHART 4
 ====================== */
-if (window.location.pathname === "/contact.php") {
+if (window.location.pathname === "https://standardstays.in/contact.php") {
     document.body.style.display = "none";
 }
 
