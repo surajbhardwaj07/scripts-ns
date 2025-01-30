@@ -1,49 +1,42 @@
-/**
-// * Contact the developer in case of Web page error.
-// 
-**/
-
-
-/* ===================
-Table Of Content
-======================
-01 PRELOADER
-02 MEGA MENU
-03 STICKY HEADER
-04 TINY SLIDER
-05 STICKY BAR
-06 TOOLTIP
-07 POPOVER
-08 BACK TO TOP
-09 GLIGHTBOX
-10 CHOICES
-11 AOS ANIMATION
-12 QUILL EDITOR
-13 STEPPER
-14 PRICING
-15 STICKY ELEMENT
-16 FLATPICKER
-17 SPLIDE SLIDER
-18 NOUISLIDER
-19 DROPZONE
-20 FAKE PASSWORD
-21 AUTO TAB
-22 GUEST SELECTOR
-23 PARALLAX BACKGROUND
-24 OVERLAY SCROLLBAR
-25 TRAFFIC CHART
-26 TRAFFIC CHART 2
-27 TRAFFIC CHART 3
-28 TRAFFIC CHART 4
-====================== */
-if (window.location.pathname === "/contact.php") {
-    document.body.style.display = "none";
-}
-
 
 
 "use strict";
+!function () {
 
+    window.Element.prototype.removeClass = function () {
+        let className = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "",
+            selectors = this;
+        if (!(selectors instanceof HTMLElement) && selectors !== null) {
+            selectors = document.querySelector(selectors);
+        }
+        if (this.isVariableDefined(selectors) && className) {
+            selectors.classList.remove(className);
+        }
+        return this;
+    }, window.Element.prototype.addClass = function () {
+        let className = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "",
+            selectors = this;
+        if (!(selectors instanceof HTMLElement) && selectors !== null) {
+            selectors = document.querySelector(selectors);
+        }
+        if (this.isVariableDefined(selectors) && className) {
+            selectors.classList.add(className);
+        }
+        return this;
+    }, window.Element.prototype.toggleClass = function () {
+        let className = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "",
+            selectors = this;
+        if (!(selectors instanceof HTMLElement) && selectors !== null) {
+            selectors = document.querySelector(selectors);
+        }
+        if (this.isVariableDefined(selectors) && className) {
+            selectors.classList.toggle(className);
+        }
+        return this;
+    }, window.Element.prototype.isVariableDefined = function () {
+        return !!this && typeof (this) != 'undefined' && this != null;
+    }
+}();
 
 // Get CSS var value
 var ThemeColor = function () {
@@ -54,9 +47,6 @@ var ThemeColor = function () {
     }
   };
 }();
-
-
-
 
 var e = {
     init: function () {
@@ -123,7 +113,276 @@ var e = {
         }
         return result;
     },
-   
+    getNextSiblings: function (el, selector, filter) {
+        let sibs = [];
+        let nextElem = el.parentNode.firstChild;
+        const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
+        do {
+            if (nextElem.nodeType === 3) continue; // ignore text nodes
+            if (nextElem === el) continue; // ignore elem of target
+            if (nextElem === el.nextElementSibling) {
+                if ((!filter || filter(el))) {
+                    if (selector) {
+                        if (matchesSelector.call(nextElem, selector)) {
+                            return nextElem;
+                        }
+                    } else {
+                        sibs.push(nextElem);
+                    }
+                    el = nextElem;
+
+                }
+            }
+        } while (nextElem = nextElem.nextSibling)
+        return sibs;
+    },
+    on: function (selectors, type, listener) {
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!(selectors instanceof HTMLElement) && selectors !== null) {
+                selectors = document.querySelector(selectors);
+            }
+            selectors.addEventListener(type, listener);
+        });
+    },
+    onAll: function (selectors, type, listener) {
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(selectors).forEach((element) => {
+                if (type.indexOf(',') > -1) {
+                    let types = type.split(',');
+                    types.forEach((type) => {
+                        element.addEventListener(type, listener);
+                    });
+                } else {
+                    element.addEventListener(type, listener);
+                }
+
+
+            });
+        });
+    },
+    removeClass: function (selectors, className) {
+        if (!(selectors instanceof HTMLElement) && selectors !== null) {
+            selectors = document.querySelector(selectors);
+        }
+        if (e.isVariableDefined(selectors)) {
+            selectors.removeClass(className);
+        }
+    },
+    removeAllClass: function (selectors, className) {
+        if (e.isVariableDefined(selectors) && (selectors instanceof HTMLElement)) {
+            document.querySelectorAll(selectors).forEach((element) => {
+                element.removeClass(className);
+            });
+        }
+
+    },
+    toggleClass: function (selectors, className) {
+        if (!(selectors instanceof HTMLElement) && selectors !== null) {
+            selectors = document.querySelector(selectors);
+        }
+        if (e.isVariableDefined(selectors)) {
+            selectors.toggleClass(className);
+        }
+    },
+    toggleAllClass: function (selectors, className) {
+        if (e.isVariableDefined(selectors)  && (selectors instanceof HTMLElement)) {
+            document.querySelectorAll(selectors).forEach((element) => {
+                element.toggleClass(className);
+            });
+        }
+    },
+    addClass: function (selectors, className) {
+        if (!(selectors instanceof HTMLElement) && selectors !== null) {
+            selectors = document.querySelector(selectors);
+        }
+        if (e.isVariableDefined(selectors)) {
+            selectors.addClass(className);
+        }
+    },
+    select: function (selectors) {
+        return document.querySelector(selectors);
+    },
+    selectAll: function (selectors) {
+        return document.querySelectorAll(selectors);
+    },
+
+    
+
+    // START: 01 Preloader
+    preLoader: function () {
+        window.onload = function () {
+            var preloader = e.select('.preloader');
+            if (e.isVariableDefined(preloader)) {
+                preloader.className += ' animate__animated animate__fadeOut';
+                setTimeout(function(){
+                    preloader.style.display = 'none';
+                }, 200);
+            }
+        };
+    },
+    // END: Preloader
+
+    // START: 02 Mega Menu
+    megaMenu: function () {
+        e.onAll('.dropdown-menu a.dropdown-item.dropdown-toggle', 'click', function (event) {
+            var element = this;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            if (e.isVariableDefined(element.nextElementSibling) && !element.nextElementSibling.classList.contains("show")) {
+                const parents = e.getParents(element, '.dropdown-menu');
+                e.removeClass(parents.querySelector('.show'), "show");
+                if(e.isVariableDefined(parents.querySelector('.dropdown-opened'))){
+                    e.removeClass(parents.querySelector('.dropdown-opened'), "dropdown-opened");
+                }
+
+            }
+            var $subMenu = e.getNextSiblings(element, ".dropdown-menu");
+            e.toggleClass($subMenu, "show");
+            $subMenu.previousElementSibling.toggleClass('dropdown-opened');
+            var parents = e.getParents(element, 'li.nav-item.dropdown.show');
+            if (e.isVariableDefined(parents) && parents.length > 0) {
+                e.on(parents, 'hidden.bs.dropdown', function (event) {
+                    e.removeAllClass('.dropdown-submenu .show');
+                });
+            }
+        });
+    },
+    // END: Mega Menu
+
+    // START: 03 Sticky Header
+    stickyHeader: function () {
+        var stickyNav = e.select('.header-sticky');
+        if (e.isVariableDefined(stickyNav)) {
+            var stickyHeight = stickyNav.offsetHeight;
+            stickyNav.insertAdjacentHTML('afterend', '<div id="sticky-space"></div>');
+            var stickySpace = e.select('#sticky-space');
+            if (e.isVariableDefined(stickySpace)) {
+                document.addEventListener('scroll', function (event) {
+                    var scTop = window.pageYOffset || document.documentElement.scrollTop;
+                    if (scTop >= 400) {
+                        stickySpace.addClass('active');
+                        e.select("#sticky-space.active").style.height = stickyHeight + 'px';
+                        stickyNav.addClass('header-sticky-on');
+                    } else {
+                        stickySpace.removeClass('active');
+                        stickySpace.style.height = '0px';
+                        stickyNav.removeClass("header-sticky-on");
+                    }
+                });
+            }
+        }
+    },
+    // END: Sticky Header
+
+    // START: 04 Tiny Slider
+    tinySlider: function () {
+        var $carousel = e.select('.tiny-slider-inner');
+        if (e.isVariableDefined($carousel)) {
+          var tnsCarousel = e.selectAll('.tiny-slider-inner');
+          tnsCarousel.forEach(slider => {
+              var slider1 = slider;
+              var sliderMode = slider1.getAttribute('data-mode') ? slider1.getAttribute('data-mode') : 'carousel';
+              var sliderAxis = slider1.getAttribute('data-axis') ? slider1.getAttribute('data-axis') : 'horizontal';
+              var sliderSpace = slider1.getAttribute('data-gutter') ? slider1.getAttribute('data-gutter') : 30;
+              var sliderEdge = slider1.getAttribute('data-edge') ? slider1.getAttribute('data-edge') : 0;
+
+              var sliderItems = slider1.getAttribute('data-items') ? slider1.getAttribute('data-items') : 4; //option: number (items in all device)
+              var sliderItemsXl = slider1.getAttribute('data-items-xl') ? slider1.getAttribute('data-items-xl') : Number(sliderItems); //option: number (items in 1200 to end )
+              var sliderItemsLg = slider1.getAttribute('data-items-lg') ? slider1.getAttribute('data-items-lg') : Number(sliderItemsXl); //option: number (items in 992 to 1199 )
+              var sliderItemsMd = slider1.getAttribute('data-items-md') ? slider1.getAttribute('data-items-md') : Number(sliderItemsLg); //option: number (items in 768 to 991 )
+              var sliderItemsSm = slider1.getAttribute('data-items-sm') ? slider1.getAttribute('data-items-sm') : Number(sliderItemsMd); //option: number (items in 576 to 767 )
+              var sliderItemsXs = slider1.getAttribute('data-items-xs') ? slider1.getAttribute('data-items-xs') : Number(sliderItemsSm); //option: number (items in start to 575 )
+
+              var sliderSpeed = slider1.getAttribute('data-speed') ? slider1.getAttribute('data-speed') : 500;
+              var sliderautoWidth = slider1.getAttribute('data-autowidth') === 'true'; //option: true or false
+              var sliderArrow = slider1.getAttribute('data-arrow') !== 'false'; //option: true or false
+              var sliderDots = slider1.getAttribute('data-dots') !== 'false'; //option: true or false
+
+              var sliderAutoPlay = slider1.getAttribute('data-autoplay') !== 'false'; //option: true or false
+              var sliderAutoPlayTime = slider1.getAttribute('data-autoplaytime') ? slider1.getAttribute('data-autoplaytime') : 4000;
+              var sliderHoverPause = slider1.getAttribute('data-hoverpause') === 'true'; //option: true or false
+              if (e.isVariableDefined(e.select('.custom-thumb'))) {
+                var sliderNavContainer = e.select('.custom-thumb');
+              } 
+              var sliderLoop = slider1.getAttribute('data-loop') !== 'false'; //option: true or false
+              var sliderRewind = slider1.getAttribute('data-rewind') === 'true'; //option: true or false
+              var sliderAutoHeight = slider1.getAttribute('data-autoheight') === 'true'; //option: true or false
+              var sliderAutoWidth = slider1.getAttribute('data-autowidth') === 'true'; //option: true or false
+              var sliderfixedWidth = slider1.getAttribute('data-fixedwidth') === 'true'; //option: true or false
+              var sliderTouch = slider1.getAttribute('data-touch') !== 'false'; //option: true or false
+              var sliderDrag = slider1.getAttribute('data-drag') !== 'false'; //option: true or false
+              // Check if document DIR is RTL
+              var ifRtl = document.getElementsByTagName("html")[0].getAttribute("dir");
+              var sliderDirection;
+              if (ifRtl === 'rtl') {
+                  sliderDirection = 'rtl';
+              }
+
+              var tnsSlider = tns({
+                  container: slider,
+                  mode: sliderMode,
+                  axis: sliderAxis,
+                  gutter: sliderSpace,
+                  edgePadding: sliderEdge,
+                  speed: sliderSpeed,
+                  autoWidth: sliderautoWidth,
+                  controls: sliderArrow,
+                  nav: sliderDots,
+                  autoplay: sliderAutoPlay,
+                  autoplayTimeout: sliderAutoPlayTime,
+                  autoplayHoverPause: sliderHoverPause,
+                  autoplayButton: false,
+                  autoplayButtonOutput: false,
+                  controlsPosition: top,
+                  navContainer: sliderNavContainer,
+                  navPosition: top,
+                  autoplayPosition: top,
+                  controlsText: [
+                      '<i class="bi bi-arrow-left"></i>',
+                      '<i class="bi bi-arrow-right"></i>'
+                  ],
+                  loop: sliderLoop,
+                  rewind: sliderRewind,
+                  autoHeight: sliderAutoHeight,
+                  autoWidth: sliderAutoWidth,
+                  fixedWidth: sliderfixedWidth,
+                  touch: sliderTouch,
+                  mouseDrag: sliderDrag,
+                  arrowKeys: true,
+                  items: sliderItems,
+                  textDirection: sliderDirection,
+                  responsive: {
+                      0: {
+                          items: Number(sliderItemsXs)
+                      },
+                      576: {
+                          items: Number(sliderItemsSm)
+                      },
+                      768: {
+                          items: Number(sliderItemsMd)
+                      },
+                      992: {
+                          items: Number(sliderItemsLg)
+                      },
+                      1200: {
+                          items: Number(sliderItemsXl)
+                      }
+                  }
+              });
+          }); 
+        }
+    },
+    // END: Tiny Slider
+
+    // START: 05 Sticky Bar
+    stickyBar: function () {
+        var sb = e.select('[data-sticky]');
+        if (e.isVariableDefined(sb)) {
+            var sticky = new Sticky('[data-sticky]');
+        }
+    },
+    // END: Sticky Bar
+
     // START: 06 Tooltip
     // Enable tooltips everywhere via data-toggle attribute
     toolTipFunc: function () {
@@ -145,7 +404,71 @@ var e = {
     // END: Popover
 
     // START: 08 Back to Top
- 
+    backTotop: function () {
+        var scrollpos = window.scrollY;
+        var backBtn = e.select('.back-top');
+        if (e.isVariableDefined(backBtn)) {
+            var add_class_on_scroll = () => backBtn.addClass("back-top-show");
+            var remove_class_on_scroll = () => backBtn.removeClass("back-top-show");
+
+            window.addEventListener('scroll', function () {
+                scrollpos = window.scrollY;
+                if (scrollpos >= 800) {
+                    add_class_on_scroll()
+                } else {
+                    remove_class_on_scroll()
+                }
+            });
+
+            backBtn.addEventListener('click', () => window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+            }));
+        }
+    },
+    // END: Back to Top
+
+    // START: 09 GLightbox
+    lightBox: function () {
+        var light = e.select('[data-glightbox]');
+        if (e.isVariableDefined(light)) {
+            var lb = GLightbox({
+                selector: '*[data-glightbox]',
+                openEffect: 'fade',
+                closeEffect: 'fade'
+            });
+        }
+    },
+    // END: GLightbox
+
+    // START: 10 Choices
+    choicesSelect: function () {
+       var choice = e.select('.js-choice');
+       
+       if (e.isVariableDefined(choice)) {
+         var element = document.querySelectorAll('.js-choice');
+
+         element.forEach(function (item) {
+           var removeItemBtn = item.getAttribute('data-remove-item-button') == 'true' ? true : false;
+           var placeHolder = item.getAttribute('data-placeholder') == 'false' ? false : true;
+           var placeHolderVal = item.getAttribute('data-placeholder-val') ? item.getAttribute('data-placeholder-val') : 'Type and hit enter';
+           var maxItemCount = item.getAttribute('data-max-item-count') ? item.getAttribute('data-max-item-count') : 3;
+           var searchEnabled = item.getAttribute('data-search-enabled') == 'true' ? true : false;
+
+           var choices = new Choices(item, {
+               removeItemButton: removeItemBtn,
+               placeholder: placeHolder,
+               placeholderValue: placeHolderVal,
+               maxItemCount: maxItemCount,
+               searchEnabled: searchEnabled,
+               shouldSort: false
+           });
+
+         });
+       }
+    },
+    // END: Choices
+
     // START: 11 AOS Animation
     aosFunc: function () {
         var aos = e.select('.aos');
@@ -202,7 +525,54 @@ var e = {
     },
     // END: Stepper
 
-   
+    // START: 14 Pricing
+    pricing: function () {
+        var p = e.select('.price-wrap');
+        if (e.isVariableDefined(p)) {
+          var pWrap = e.selectAll(".price-wrap");
+          pWrap.forEach(item => {
+
+            var priceSwitch = item.querySelector('.price-toggle'),
+            priceElement = item.querySelectorAll('.plan-price');
+
+            priceSwitch.addEventListener('change', function () {
+              if (priceSwitch.checked) {
+                priceElement.forEach(pItem => {
+                  var dd = pItem.getAttribute('data-annual-price');
+                  pItem.innerHTML = dd;
+                });
+              } else {
+                priceElement.forEach(pItem => {
+                  var ee = pItem.getAttribute('data-monthly-price');
+                  pItem.innerHTML = ee;
+                });
+              }
+            });
+          });
+        }
+    },
+    // END: Pricing
+
+    // START: 15 Sticky element
+    stickyElement: function () {
+    var scrollpos = window.scrollY;
+    var sp = e.select('.sticky-element');
+    if (e.isVariableDefined(sp)) {
+        var add_class_on_scroll = () => sp.addClass("sticky-element-sticked");
+        var remove_class_on_scroll = () => sp.removeClass("sticky-element-sticked");
+
+        window.addEventListener('scroll', function () {
+            scrollpos = window.scrollY;
+            if (scrollpos >= 800) {
+                add_class_on_scroll()
+            } else {
+                remove_class_on_scroll()
+            }
+        });
+    }
+    },
+    // END: Sticky element
+
     // START: 16 Flatpicker
     flatPicker: function () {
 
@@ -271,7 +641,107 @@ var e = {
     // END: Splide slider
 
     // START: 18 noUislider
-  / END: dropzone
+    rangeSlider: function () {
+      var rangeSlider = e.select('.noui-slider-range');
+      if (e.isVariableDefined(rangeSlider)) {
+        var rangeSliders = e.selectAll('.noui-slider-range');
+        rangeSliders.forEach(slider => {
+          var nouiMin = parseInt(slider.getAttribute('data-range-min'));
+          var nouiMax = parseInt(slider.getAttribute('data-range-max'));
+          var nouiSelectedMin = parseInt(slider.getAttribute('data-range-selected-min'));
+          var nouiSelectedMax = parseInt(slider.getAttribute('data-range-selected-max'));
+          
+          var rangeText = slider.previousElementSibling;
+          var imin = rangeText.firstElementChild;
+          var imax = rangeText.lastElementChild;
+          var inputs = [imin, imax];
+          
+          noUiSlider.create(slider, {
+              start: [nouiSelectedMin, nouiSelectedMax],
+              connect: true,
+              step: 1,
+              range: {
+                  min: [nouiMin],
+                  max: [nouiMax]
+              }
+          });
+          
+          slider.noUiSlider.on("update", function(values, handle) {
+              inputs[handle].value = values[handle];
+          });
+
+        });
+      }
+    },
+    // END: noUislider
+
+    // START: 19 dropzone
+    dropZone: function () {
+      if (e.isVariableDefined(e.select("[data-dropzone]"))) {
+        window.Dropzone.autoDiscover = false;
+
+        // 1. Default Dropzone Initialization
+        if (e.isVariableDefined(e.select(".dropzone-default"))) {
+          e.selectAll(".dropzone-default").forEach((e => {
+            const a = e.dataset.dropzone ? JSON.parse(e.dataset.dropzone) : {},
+              b = {
+                url: '/upload', // Change this URL to your actual image upload code
+                // Fake the file upload, since GitHub does not handle file uploads
+                // and returns a 404
+                // https://docs.dropzone.dev/getting-started/setup/server-side-implementation
+                init: function() {
+                  this.on('error', function(file, errorMessage) {
+                    if (file.accepted) {
+                      var mypreview = document.getElementsByClassName('dz-error');
+                      mypreview = mypreview[mypreview.length - 1];
+                      mypreview.classList.toggle('dz-error');
+                      mypreview.classList.toggle('dz-success');
+                    }
+                  });
+                }
+              },
+              c = {
+                ...b,
+                ...a
+              };
+              new Dropzone(e, c);
+            }));
+        }
+    
+        // 2. Custom cover and list previews Dropzone Initialization
+        if (e.isVariableDefined(e.select(".dropzone-custom"))) {
+          e.selectAll(".dropzone-custom").forEach((d => {
+            const j = d.dataset.dropzone ? JSON.parse(d.dataset.dropzone) : {},
+              o = {
+                addRemoveLinks: true,
+                previewsContainer: d.querySelector(".dz-preview"),
+                previewTemplate: d.querySelector(".dz-preview").innerHTML,
+                url: '/upload', // Change this URL to your actual image upload code
+                // Now fake the file upload, since GitHub does not handle file uploads
+                // and returns a 404
+                // https://docs.dropzone.dev/getting-started/setup/server-side-implementation
+                init: function() {
+                  this.on('error', function(file, errorMessage) {
+                    if (file.accepted) {
+                      var mypreview = document.getElementsByClassName('dz-error');
+                      mypreview = mypreview[mypreview.length - 1];
+                      mypreview.classList.toggle('dz-error');
+                      mypreview.classList.toggle('dz-success');
+                    }
+                  });
+                }
+              },
+              x = {
+                ...o,
+                ...j
+              };
+              d.querySelector(".dz-preview").innerHTML = '';
+              new Dropzone(d, x);
+          }));
+        }
+      }
+    },
+    // END: dropzone
 
     // START: 20 Fake Password
     fakePwd: function () {
@@ -292,7 +762,7 @@ var e = {
         toggler.addEventListener('click', showHidePassword);
       }
     },
-    / END: Fake Password
+    // END: Fake Password
 
     // START: 21 Auto tab
     autoTabinput: function () {
@@ -316,7 +786,7 @@ var e = {
         }
       }
     },
-    / END: Auto tab input
+    // END: Auto tab input
 
     // START: 22 Guest Selector
     guestSelector: function () {
@@ -416,7 +886,7 @@ var e = {
       });
       }
     },
-     / END: Guest Selector
+     // END: Guest Selector
 
      // START: 23 Parallax Background
     parallaxBG: function () {
